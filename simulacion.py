@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import plotly.graph_objects as go
 
 tiempoGlobal = 0
 
@@ -25,9 +26,16 @@ cola2 = []
 esperaCola1 = []
 esperaCola2 = []
 
+carrosCola1 = []
+carrosCola2 = []
+
 while tiempoGlobal < 10000 :
 	cola1 = [x + 1 for x in cola1]
 	cola2 = [x + 1 for x in cola2]
+	
+	carrosCola1.append(len(cola1))
+	carrosCola2.append(len(cola2))
+
 	tiempoGlobal += 1
 	print(cola1, " - ", cola2)
 
@@ -47,7 +55,6 @@ while tiempoGlobal < 10000 :
 
 	if(tiempoSemaforo1[1]):
 		tiempoSemaforo1[0] -= 1
-		print("1 Semaforo Verde")
 		if(tiempoSemaforo1[0] == 0):
 			tiempoSemaforo1 = [tiempoSemaforo1Verde, False]
 			tiempoSemaforo2 = [tiempoSemaforo2Verde, False]
@@ -65,7 +72,6 @@ while tiempoGlobal < 10000 :
 				retrasoArranque1 = 2
 
 	if(tiempoSemaforo2[1]):
-		print("2 Semaforo Verde")
 		tiempoSemaforo2[0] -= 1
 		if(tiempoSemaforo2[0] == 0):
 			tiempoSemaforo2 = [tiempoSemaforo2Verde, False]
@@ -84,7 +90,6 @@ while tiempoGlobal < 10000 :
 				retrasoArranque2 = 2
 
 	if(tiempoLiberarFlujo[1]):
-		print("ROJO")
 		tiempoLiberarFlujo[0] -= 1
 		if(tiempoLiberarFlujo[0] == 0 and ciclo == 1 ):
 			tiempoLiberarFlujo = [tiempoSemaforosRojo, False]
@@ -96,3 +101,10 @@ while tiempoGlobal < 10000 :
 			tiempoSemaforo1 = [tiempoSemaforo1Verde, False]
 			tiempoSemaforo2 = [tiempoSemaforo2Verde, True]
 			ciclo = 1
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(y=carrosCola1, name='70Secs'))
+fig.add_trace(go.Scatter(y=carrosCola2, name='90Secs'))
+
+fig.write_html('first_figure.html', auto_open=True)
